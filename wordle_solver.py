@@ -1,6 +1,15 @@
-fixed_letters = {}
+fixed_letters = []
+fixed_letters_position = []
 unfixed_letters = []
 banned_letters = []
+
+fixed_1 = '?'
+fixed_2 = '?'
+fixed_3 = '?'
+fixed_4 = '?'
+fixed_5 = '?'
+
+fixed_word = [fixed_1, fixed_2, fixed_3, fixed_4, fixed_5]
 
 fixed_letter_range = int(input('Enter the amount of letters whose position you know: '))
 unfixed_letter_range = int(input('Enter the amount of letters whose position you don\'t know: '))
@@ -8,10 +17,10 @@ banned_letter_range = int(input('Enter the amount of letters that are not in the
 
 def build_fixed():
     for i in range(fixed_letter_range):
-        k = input('Enter a letter with a known position: ')
-        v = int(input(f'Enter the position of {k}, 1-5: ')) - 1
-        fixed_letters[k] = v
-    return fixed_letters
+        letter = input('Enter a letter with a known position: ')
+        position = int(input(f'Enter the position of {letter}, 1-5: ')) - 1
+        fixed_word[position] = letter
+    return fixed_word
 
 def build_unfixed():
     for i in range(unfixed_letter_range):
@@ -35,11 +44,18 @@ def check_unfixed(word):
     return True
 
 def check_fixed(word):
-    for key in fixed_letters:
-        if word[fixed_letters[key]] == key:
-            continue
+    count = 0
+    for i in fixed_word:
+        if i != '?':
+            if i == word[count]:
+                count += 1
+                continue
+            else:
+                return False
+                break
         else:
-            return False
+            count += 1
+            continue
     return True
 
 def check_banned(word):
