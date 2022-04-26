@@ -1,19 +1,21 @@
+#blue is unfixed, orange is fixed, grey is not in word.
+
 fixed_letters = []
 fixed_letters_position = []
 unfixed_letters = []
 banned_letters = []
 
-fixed_1 = '?'
-fixed_2 = '?'
-fixed_3 = '?'
-fixed_4 = '?'
-fixed_5 = '?'
-
-fixed_word = [fixed_1, fixed_2, fixed_3, fixed_4, fixed_5]
+fixed_word = ['?','?','?','?','?']
+unfixed_word = [[],[],[],[],[]]
 
 fixed_letter_range = int(input('Enter the amount of letters whose position you know: '))
 unfixed_letter_range = int(input('Enter the amount of letters whose position you don\'t know: '))
 banned_letter_range = int(input('Enter the amount of letters that are not in the word: '))
+
+word_list = []
+with open('five_character_words.csv', 'r') as file:
+    for i in file:
+        word_list.append(i)
 
 def build_fixed():
     for i in range(fixed_letter_range):
@@ -24,8 +26,10 @@ def build_fixed():
 
 def build_unfixed():
     for i in range(unfixed_letter_range):
-        n = str(input('Enter a letter with an unknown position: '))
-        unfixed_letters.append(n)
+        letter = str(input('Enter a letter with an unknown position: '))
+        position = int(input('Enter the position of the unknown letter: ')) - 1
+        unfixed_letters.append(letter)
+        unfixed_word[position].append(letter)
     return unfixed_letters
 
 def build_banned():
@@ -35,12 +39,20 @@ def build_banned():
     return(banned_letters)
 
 def check_unfixed(word):
+    uf_count = 0
     for i in unfixed_letters:
-        if i in word:
-            continue
-        else:
+        if i not in word:
             return False
             break
+        else:
+            continue
+    for i in range(5):
+        if word[uf_count] in unfixed_word[uf_count]:
+            return False
+            break
+        else:
+            uf_count += 1
+            continue
     return True
 
 def check_fixed(word):
@@ -66,11 +78,6 @@ def check_banned(word):
         else:
             continue
     return True
-
-word_list = []
-with open('five_character_words.csv', 'r') as file:
-    for i in file:
-        word_list.append(i)
 
 def solve_wordle():
     possible_list = []
